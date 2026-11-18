@@ -191,7 +191,7 @@ const EL=[
  ['sekretaer','Sekretär','ganz','sekretaer',[1]],['naehen','Nähmaschine','ganz','klapptisch',[1]],['werkbank','Werkbank','ganz','boden',[1]],
  ['notfall','Notfall-Cube','ganz','auszug',[0]],
  ['drucker','Drucker + Scanner','halb','auszug',[2,0]],['kaffee','Siebträger','ganz','auszug',[1]],['beamer','Kino','halb','auszug',[2]],
- ['platte','Plattenspieler / DJ-Pult / Orgel','ganz','auszug',[1]],['dreid','3D-Druck','ganz','auszug',[1]],['minibar','Aufbewahrungsboxen','halb','auszug',[0]],
+ ['platte','Plattenspieler / DJ-Pult / Orgel','ganz','auszug',[1]],['dreid','3D-Druck','ganz','auszug',[1]],['regalfachtuer','Regalfach mit Tür','ganz','tuer',[0]],
  ['safe','Aktensafe','halb','tuer',[0]],['apotheke','Hausapotheke','halb','tuer',[2]],['schluessel','Schlüsselkasten','halb','tuer',[2]],['laden','Ladestation','halb','tuer',[2]],
  ['buehne','Puppentheater','ganz','tuer',[0]],
  ['router','Router + NAS','halb','boden',[2,0]],['regal','Regal','halb','boden',[2]],['buecher','Bücher','beide','boden',[0,2]],['kinderlib','Kinder Bibliothek','ganz','boden',[0]],
@@ -214,7 +214,7 @@ const it=(k,av)=>({k,av:av||'v'});
 function preset(){const s=emptyState();
  s.A.mitte.full=it('sekretaer'); s.A.oben.cells.lu=it('drucker','s'); s.A.oben.cells.ru=it('router'); s.A.oben.cells.lo=it('apotheke'); s.A.oben.cells.ro=it('buecherhalb');
  s.A.unten.full=it('ordner'); s.B.oben.cells.lu=it('beamer'); s.B.oben.cells.ru=it('schluessel'); s.B.oben.cells.ro=it('buecherhalbtuer');
- s.B.mitte.full=it('werkbank'); s.B.unten.cells.l=it('minibar'); s.B.unten.cells.r=it('safe'); return s;}
+ s.B.mitte.full=it('werkbank'); s.B.unten.full=it('regalfachtuer'); return s;}
 let S=preset();
 const ALIAS={orgel:'platte',dj:'platte'};
 function clean(s){['A','B'].forEach(sd=>Object.values(s[sd]||{}).forEach(f=>{if(!f)return;if(f.full&&ALIAS[f.full.k])f.full.k=ALIAS[f.full.k];Object.values(f.cells||{}).forEach(v=>{if(v&&ALIAS[v.k])v.k=ALIAS[v.k];});}));['A','B'].forEach(sd=>Object.values(s[sd]||{}).forEach(f=>{if(!f)return;if(f.full&&!BY[f.full.k])f.full=null;Object.keys(f.cells||{}).forEach(p=>{if(f.cells[p]&&!BY[f.cells[p].k])f.cells[p]=null;});}));return s;}
@@ -247,7 +247,7 @@ function resolve(sd,lvl,f){const P=[],C={},N=[],Q=[];const I=null,HR=T(430,0,0);
  const full=f.full,cells=f.cells||{};
  if(lvl==='unten'){
   if(full){const k=full.k,bt=BY[k].bt;lvwarn(k);let m,t,ex;
-   if(k==='ordner'){m='M2A';t='Tür + Zwischenboden';ex=true;}else if(k==='katze'){m='M2D';t='Tür mit Katzenklappe';ex=true;}else if(k==='bar'){m='M2G';t='Tür + Tür mit Zwischenboden';ex=true;}else if(bt==='tuer'){m='M2B';t='Tür Seiteneinschub';ex=true;}else if(bt==='boden'){m='M2E';t='Zwischenboden';ex=true;}
+   if(k==='ordner'){m='M2A';t='Tür + Zwischenboden';ex=true;}else if(k==='katze'){m='M2D';t='Tür mit Katzenklappe';ex=true;}else if(k==='bar'){m='M2G';t='Tür + Tür mit Zwischenboden';ex=true;}else if(k==='regalfachtuer'){m='M2C';t='Tür + Zwischenboden';ex=true;}else if(bt==='tuer'){m='M2B';t='Tür Seiteneinschub';ex=true;}else if(bt==='boden'){m='M2E';t='Zwischenboden';ex=true;}
    else if(bt==='offen'){m='M2F';t='offen';ex=true;}else if(bt==='auszug'){m='M2B';t='Tür Seiteneinschub, Auszug verdeckt';ex=false;}else{m='M2F';t='offen';ex=false;}
    add(m,null);cell('full',m,t,ex,full,I,I,860);}
   else{const l=cells.l,r=cells.r;[l,r].forEach(x=>{if(x)lvwarn(x.k);});
